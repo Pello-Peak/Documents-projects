@@ -3,40 +3,73 @@
 #include <string>
 #include <random>
 #include <thread>
+#include <ncurses.h>
+#include <atomic>
 
 using namespace std;
-unsigned int food = 4;
-string foodBar[4] = {"-","- -","- - -","- - - -"};
-int i;
+atomic<int> food(4);
+string foodBar[5] = {" ","-", "- -", "- - -", "- - - -"};
+char ch = '\0';
+bool timerAct = true;
 
-random_device rd;
-mt19937 gen(rd());
-uniform_int_distribution<> dis(10, 45);
 
 void foodBarTimer() {
-    this_thread::sleep_for(chrono::seconds(dis(gen)));
-    food--;
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dis(10, 45);
+
+    while (true) {
+        this_thread::sleep_for(chrono::minutes(dis(gen)));
+        food--;
+    }
 }
 
-void feedKey() {
-// find a way to get key input
+void death() {
+    if (food <= 0) {
+        endwin();
+        cout << "You killed your son..." << endl;
+        exit(0);
+    }
 }
 
 int main() {
+
+    initscr();
+    cbreak();
+    noecho();
+    nodelay(stdscr, TRUE);
+
     thread(foodBarTimer).detach();
-    while (i <= 240) {
-        system("clear");
-        cout << "*_*" << endl;
-        cout << endl<<"[F]Feed" << endl;
-        cout << endl<<"Food:"<<foodBar[food]<<endl;
-        // implement key input scan
+    while (true) {
+        ch = getch();
+
+        if (ch == 'f' && food < 4) {
+            food++;
+        }
+
+
+        clear();
+        mvprintw(0, 0, "*_*");
+        mvprintw(2, 0, "[F]Feed");
+        mvprintw(4, 0, "Food: %s", foodBar[food].c_str());
+        refresh();
         this_thread::sleep_for(chrono::milliseconds(250));
 
-        system("clear");
-        cout << "-_-" << endl;
-        cout << endl<<"[F]Feed" << endl;
-        cout << endl<<"Food:"<<foodBar[food]<<endl;
-        // implement key input scan
+        ch = getch();
+
+        if (ch == 'f' && food < 4) {
+            food++;
+        }
+
+        clear();
+        mvprintw(0, 0, "-_-");
+        mvprintw(2, 0, "[F]Feed");
+        mvprintw(4, 0, "Food: %s", foodBar[food].c_str());
+        refresh();
         this_thread::sleep_for(chrono::milliseconds(250));
+        death();
     }
+
+    endwin();
 }
+
