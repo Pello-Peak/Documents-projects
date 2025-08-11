@@ -5,7 +5,7 @@
 #include <thread>
 
 using namespace std;
-int food = 3;
+unsigned int food = 4;
 string foodBar[4] = {"-","- -","- - -","- - - -"};
 int i;
 
