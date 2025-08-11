@@ -12,23 +12,24 @@ string foodBar[5] = {" ","-", "- -", "- - -", "- - - -"};
 char ch = '\0';
 bool timerAct = true;
 
-
 void foodBarTimer() {
     random_device rd;
     mt19937 gen(rd());
-    uniform_int_distribution<> dis(10, 45);
+    uniform_int_distribution<> dis(5, 10);
 
     while (true) {
-        this_thread::sleep_for(chrono::minutes(dis(gen)));
+        this_thread::sleep_for(chrono::seconds(dis(gen)));
         food--;
     }
 }
 
 void death() {
-    if (food <= 0) {
-        endwin();
-        cout << "You killed your son..." << endl;
-        exit(0);
+    while (true) {
+        if (food <= 0) {
+            endwin();
+            cout << "You killed your son..." << endl;
+            exit(0);
+        }
     }
 }
 
@@ -40,13 +41,14 @@ int main() {
     nodelay(stdscr, TRUE);
 
     thread(foodBarTimer).detach();
+    thread(death).detach();
+
     while (true) {
         ch = getch();
 
         if (ch == 'f' && food < 4) {
             food++;
         }
-
 
         clear();
         mvprintw(0, 0, "*_*");
@@ -67,9 +69,6 @@ int main() {
         mvprintw(4, 0, "Food: %s", foodBar[food].c_str());
         refresh();
         this_thread::sleep_for(chrono::milliseconds(250));
-        death();
     }
-
     endwin();
 }
-
