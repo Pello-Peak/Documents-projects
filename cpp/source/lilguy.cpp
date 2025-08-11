@@ -15,10 +15,10 @@ bool timerAct = true;
 void foodBarTimer() {
     random_device rd;
     mt19937 gen(rd());
-    uniform_int_distribution<> dis(5, 10);
+    uniform_int_distribution<> dis(10, 45);
 
     while (true) {
-        this_thread::sleep_for(chrono::seconds(dis(gen)));
+        this_thread::sleep_for(chrono::minutes(dis(gen)));
         food--;
     }
 }
