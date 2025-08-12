@@ -51,6 +51,7 @@ void deathCheck() {
     while (true) {
         if (food <= 0) {
             endwin();
+            clear();
             cout << "You killed your son..." << endl;
             exit(0);
         }
