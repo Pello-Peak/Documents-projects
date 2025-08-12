@@ -28,26 +28,24 @@ void foodBarTimer() {
 void emotionEval() {
     while (true) {
         switch(food) {
-        case 0:
-            emotionSet = 0;
-            break;
-        case 1:
-            emotionSet = 0;
-            break;
-        case 2:
-            emotionSet = 1;
-            break;
-        case 3:
-            emotionSet = 1;
-            break;
-        case 4:
-            emotionSet = 2;
-            break;
+            case 0:
+                emotionSet = 0;
+                break;
+            case 1:
+                emotionSet = 0;
+                break;
+            case 2:
+                emotionSet = 1;
+                break;
+            case 3:
+                emotionSet = 1;
+                break;
+            case 4:
+                emotionSet = 2;
+                break;
         }
     }
 }
-
-
 
 void deathCheck() {
     while (true) {
